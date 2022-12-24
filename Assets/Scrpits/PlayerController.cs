@@ -55,10 +55,17 @@ public class PlayerController : MonoBehaviour
             Fire();
         }
 
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.A))
         {
-            rigidbody2D.AddForce(-transform.right*5, ForceMode2D.Impulse);
+            StartCoroutine(Dash());
         }
+       
+    }
+    IEnumerator Dash()
+    {
+        rigidbody2D.velocity = (-transform.right * 25);
+        yield return new WaitForSeconds(0.12f);
+        rigidbody2D.velocity = Vector2.zero;
     }
 
     public void ChangeGun(Gun newGun)
