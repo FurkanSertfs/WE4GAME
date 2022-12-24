@@ -63,7 +63,7 @@ public class PlayerController : MonoBehaviour
     }
     IEnumerator Dash()
     {
-        rigidbody2D.velocity = (-transform.right * 25);
+        rigidbody2D.velocity = (transform.up * 15);
         yield return new WaitForSeconds(0.12f);
         rigidbody2D.velocity = Vector2.zero;
     }
