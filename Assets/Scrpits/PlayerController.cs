@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     FireButton fireButton;
+    [SerializeField]
+    DashButton dashgButton;
 
     [SerializeField]
     float fireRate;
@@ -30,6 +32,7 @@ public class PlayerController : MonoBehaviour
     char infinity;
     [SerializeField]
     GameObject muzzleFlash;
+    
 
     [SerializeField]
     Gun defaultPistol;
@@ -38,6 +41,11 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     GameObject tailRenderer;
+    [SerializeField]
+    float dashCooldown;
+    float dashTimer;
+    [SerializeField]
+    Image dashButton;
 
     [SerializeField]
     Rigidbody2D rigidbody2D;
@@ -58,10 +66,30 @@ public class PlayerController : MonoBehaviour
             Fire();
         }
 
-        if (Input.GetKeyDown(KeyCode.A))
+        if (dashTimer < Time.time)
         {
-            StartCoroutine(Dash());
+
+          
+          
+
+            if (Input.GetKeyDown(KeyCode.A) || dashgButton.isPressed)
+            {
+                dashButton.fillAmount = 0;
+                dashTimer = Time.time + dashCooldown;
+                StartCoroutine(Dash());
+
+            }
+
+           
         }
+
+        else
+        {
+            dashButton.fillAmount += Time.deltaTime / dashCooldown;
+        }
+
+
+       
        
     }
     IEnumerator Dash()
@@ -71,7 +99,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.12f);
         rigidbody2D.velocity = Vector2.zero;
         yield return new WaitForSeconds(0.3f);
-        tailRenderer.SetActive(true);
+        tailRenderer.SetActive(false);
 
     }
 
@@ -95,7 +123,7 @@ public class PlayerController : MonoBehaviour
 
        
 
-         yield return new WaitForSeconds(0.01f);
+        yield return new WaitForSeconds(0.01f);
        
         magazineBar.fillAmount +=  0.01f/fireRate;
       
