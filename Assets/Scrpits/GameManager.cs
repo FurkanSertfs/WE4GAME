@@ -50,6 +50,11 @@ public class GameManager : MonoBehaviour
 
             newPlayer.GetComponent<ClientPlayer>().Id = id;
             newPlayer.GetComponent<ClientPlayer>().Username = userName;
+            newPlayer.GetComponent<ClientPlayer>().canvas.SetActive(true);
+            newPlayer.GetComponent<ClientPlayer>().mainCamera.SetActive(true);
+            newPlayer.GetComponent<ClientPlayer>().GetComponentInChildren<JoystickPlayerExample>().enabled = true;
+            newPlayer.GetComponent<ClientPlayer>().GetComponentInChildren<PlayerController>().enabled = true;
+
 
             clients.Add(newPlayer.GetComponent<ClientPlayer>().Id, newPlayer.GetComponent<ClientPlayer>());
 

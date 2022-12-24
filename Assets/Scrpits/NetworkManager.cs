@@ -35,9 +35,12 @@ public class NetworkManager : MonoBehaviour
         [SerializeField]
         InputField inputField;
 
+        [SerializeField]
+        float lerpSpeed;
+
         public string playerName;
 
-        
+        float lastPing;
 
         private void Awake()
         {
@@ -79,6 +82,8 @@ public class NetworkManager : MonoBehaviour
             yield return null;
         }
     }
+    
+    
 
     public void Connect()
         {
@@ -148,16 +153,33 @@ public class NetworkManager : MonoBehaviour
 
         netPacketProcessor.SubscribeReusable<ServerMovementPacket>((packet) =>
         {
+            if (GameManager.instance.clients.ContainsKey(packet.Id))
+            {
+                GameManager.instance.clients[packet.Id].gameObject.transform.position
+          = Vector3.Lerp(GameManager.instance.clients[packet.Id].gameObject.transform.position, new Vector3(packet.PositionX, packet.PositionY, packet.PositionZ), lerpSpeed);
 
-            GameManager.instance.clients[packet.Id].gameObject.transform.position 
-            = Vector3.Lerp(GameManager.instance.clients[packet.Id].gameObject.transform.position,new Vector3(packet.PositionX, packet.PositionY, packet.PositionZ),100);
+                GameManager.instance.clients[packet.Id].gameObject.transform.eulerAngles = new Vector3(0, 0, packet.Rotation);
 
-            GameManager.instance.clients[packet.Id].gameObject.transform.eulerAngles = new Vector3(0,0,packet.Rotation);
+            }
 
 
         });
 
+        netPacketProcessor.SubscribeReusable<PingPongPacket>((packet) =>
+        {
 
+
+            if (lastPing!=0)
+            {
+                
+            }
+
+            lastPing = Time.time;
+
+
+
+
+        });
 
 
     }
@@ -223,6 +245,17 @@ public class NetworkManager : MonoBehaviour
         private void Update()
         {
             if (netManager != null)
+            {
                 netManager.PollEvents();
+            }
+
+            if (NetworkManager.instance.server != null)
+            {
+            NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new PingPongPacket
+            {
+                Id = localPlayerId
+
+            }, LiteNetLib.DeliveryMethod.ReliableOrdered); ;
+            }
         }
-    }
+}

@@ -698,11 +698,12 @@ MonoBehaviour:
   isLocalPlayer: 0
   localPlayer: {fileID: 0}
   localPlayerId: 0
-  serverIP: 192.168.43.70
+  serverIP: 172.20.10.2
   port: 9050
   connectionString: secretKey
-  ClientPrefab: {fileID: 723472957837699519, guid: 9d9cb76161bb65f4ba077fb00948e647, type: 3}
+  ClientPrefab: {fileID: 1302981270044287718, guid: 54d92be3e85bf7542807b5dd553ddd26, type: 3}
   inputField: {fileID: 1642649768}
+  lerpSpeed: 5
   playerName: 
 --- !u!4 &1621742127
 Transform:
@@ -997,7 +998,7 @@ PrefabInstance:
     - target: {fileID: 1454442379103980727, guid: 1f706c77001d56641880b001297967c2, type: 3}
       propertyPath: playerPrefab
       value: 
-      objectReference: {fileID: 723472957837699519, guid: 35a6a53ab4c024141beb3490bd21d33b, type: 3}
+      objectReference: {fileID: 1302981270044287718, guid: 2b396bb2a976219409bca86e9de85f0a, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f706c77001d56641880b001297967c2, type: 3}
 --- !u!1 &2059707301
