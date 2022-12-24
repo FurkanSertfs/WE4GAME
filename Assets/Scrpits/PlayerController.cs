@@ -37,6 +37,9 @@ public class PlayerController : MonoBehaviour
     float timer;
 
     [SerializeField]
+    GameObject tailRenderer;
+
+    [SerializeField]
     Rigidbody2D rigidbody2D;
     
 
@@ -64,8 +67,12 @@ public class PlayerController : MonoBehaviour
     IEnumerator Dash()
     {
         rigidbody2D.velocity = (transform.up * 15);
+        tailRenderer.SetActive(true);
         yield return new WaitForSeconds(0.12f);
         rigidbody2D.velocity = Vector2.zero;
+        yield return new WaitForSeconds(0.3f);
+        tailRenderer.SetActive(true);
+
     }
 
     public void ChangeGun(Gun newGun)
