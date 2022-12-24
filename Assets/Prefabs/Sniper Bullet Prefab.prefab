@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -2937708261998427096}
   - component: {fileID: -3325925151338849657}
   m_Layer: 0
-  m_Name: Bullet Prefab
+  m_Name: Sniper Bullet Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 211476526425335274}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5.36, y: 1964.773, z: 0}
-  m_LocalScale: {x: 0.05, y: 0.05, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_Children:
   - {fileID: 1339175484406432432}
   m_Father: {fileID: 0}
@@ -196,8 +196,8 @@ TrailRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.018325806
-        value: 0.18714905
+        time: 0.010475159
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -205,8 +205,8 @@ TrailRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.44031277
-        value: 0.19064945
+        time: 0.45863858
+        value: 1
         inSlope: 0.09834811
         outSlope: 0.09834811
         tangentMode: 0
@@ -214,8 +214,8 @@ TrailRenderer:
         inWeight: 0
         outWeight: 0.5208101
       - serializedVersion: 3
-        time: 0.69950426
-        value: 0.19648093
+        time: 0.7387804
+        value: 0.99180716
         inSlope: 0.0963433
         outSlope: 0.0963433
         tangentMode: 0
