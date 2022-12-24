@@ -11,4 +11,10 @@ public class Gun : ScriptableObject
     public int magazine;
     public bool unLimited;
     public bool defaultGun;
+
+    public Transform bulletSpawnPoint;
+    public GameObject gunPreFab;
+    public GameObject MuzzleFlash;
+    
+
 }
