@@ -41,7 +41,7 @@ public class JoystickPlayerExample : MonoBehaviour
                 PositionX = transform.position.x,
                 PositionY = transform.position.y,
                 PositionZ = transform.position.z,
-                Rotation = transform.rotation.z
+                Rotation = transform.eulerAngles.z
 
             }, LiteNetLib.DeliveryMethod.ReliableOrdered);
         }

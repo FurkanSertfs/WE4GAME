@@ -1,11 +1,11 @@
 ﻿using LiteNetLib;
+using UnityEngine;
 
-
-    public class ClientPlayer
+    public class ClientPlayer:MonoBehaviour
     {
         private NetPeer Peer;
-        public int Id { get; }
-        public string Username { get; }
+        public int Id { get; set; }
+        public string Username { get; set; }
 
 
         public ClientPlayer(NetPeer Peer, string Username, int Id)
