@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.A) || dashgButton.isPressed)
             {
-                dashButton.fillAmount = 0;
+                dashButton.fillAmount = 1;
                 dashTimer = Time.time + dashCooldown;
                 StartCoroutine(Dash());
 
@@ -85,7 +85,7 @@ public class PlayerController : MonoBehaviour
 
         else
         {
-            dashButton.fillAmount += Time.deltaTime / dashCooldown;
+            dashButton.fillAmount -= Time.deltaTime / dashCooldown;
         }
 
 
