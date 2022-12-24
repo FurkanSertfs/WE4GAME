@@ -6,8 +6,10 @@ using TMPro;
 using UnityEngine;
 using Deathmatch.io.Packets;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using System.Collections;
 
-    public class NetworkManager : MonoBehaviour
+public class NetworkManager : MonoBehaviour
     {
         //public fields
         public static NetworkManager instance;
@@ -29,7 +31,13 @@ using UnityEngine.SceneManagement;
        
         [Header("Prefab")]
         [SerializeField] private GameObject ClientPrefab;
-     
+
+        [SerializeField]
+        InputField inputField;
+
+        public string playerName;
+
+        
 
         private void Awake()
         {
@@ -45,9 +53,31 @@ using UnityEngine.SceneManagement;
                 Destroy(gameObject);
             }
         }
+
+    
+
+   
+
+
     private void Start()
     {
         Connect();
+
+        StartCoroutine(LoadScene());
+    }
+
+    IEnumerator LoadScene()
+    {
+        yield return null;
+
+        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(1);
+
+        asyncOperation.allowSceneActivation = false;
+
+        while (!asyncOperation.isDone)
+        {
+            yield return null;
+        }
     }
 
     public void Connect()
@@ -65,9 +95,10 @@ using UnityEngine.SceneManagement;
 
             netListener.PeerConnectedEvent += (server) =>
             {
+                
                 this.server = server;
                 Debug.Log($"Network Manager: Connected to server.");
-                SceneManager.LoadScene(1);
+               
             };
 
             netListener.NetworkReceiveEvent += (server, reader, deliveryMethod) =>
@@ -83,18 +114,83 @@ using UnityEngine.SceneManagement;
                
             });
 
+        netPacketProcessor.SubscribeReusable<ClientJoinResponsePacket>((packet) =>
+        {
+            if (packet.Success)
+            {
+                GameManager.instance.id = packet.Id;
+                GameManager.instance.userName = packet.Username;
+            }
+
+        });
+
+        netPacketProcessor.SubscribeReusable<GameStartPacket>((packet) =>
+        {
+            GameManager.instance.gameStarted = true;
+            GameManager.instance.gameDuration = packet.GameDuration;
+            
+            SceneManager.LoadScene(1);
 
 
+        });
+
+        netPacketProcessor.SubscribeReusable<NewUserPacket>((packet) =>
+        {
+
+            StartCoroutine(Wait(packet));
+          
 
 
+          
+         
 
+        });
+
+        netPacketProcessor.SubscribeReusable<ServerMovementPacket>((packet) =>
+        {
+
+            GameManager.instance.clients[packet.Id].gameObject.transform.position 
+            = Vector3.Lerp(GameManager.instance.clients[packet.Id].gameObject.transform.position,new Vector3(packet.PositionX, packet.PositionY, packet.PositionZ),100);
+
+            GameManager.instance.clients[packet.Id].gameObject.transform.eulerAngles = new Vector3(0,0,packet.Rotation);
+
+
+        });
 
 
 
 
     }
 
-        public void Disconnect()
+
+    IEnumerator Wait(NewUserPacket packet)
+    {
+        yield return new WaitForSeconds(0.1f);
+
+
+        if (SceneManager.GetActiveScene().buildIndex==1)
+        {
+            GameObject newPlayer = Instantiate(ClientPrefab, Vector3.zero, Quaternion.identity);
+
+            newPlayer.GetComponent<ClientPlayer>().Id = packet.Id;
+
+            newPlayer.GetComponent<ClientPlayer>().Username = packet.Username;
+
+
+            GameManager.instance.clients.Add(packet.Id, newPlayer.GetComponent<ClientPlayer>());
+        }
+        else
+        {
+            StartCoroutine(Wait(packet));
+        }
+
+       
+
+
+    }
+
+
+    public void Disconnect()
         {
             netManager.Stop();
           
