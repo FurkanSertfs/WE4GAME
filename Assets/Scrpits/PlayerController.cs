@@ -28,11 +28,17 @@ public class PlayerController : MonoBehaviour
     Text magazineCountText;
     [SerializeField]
     char infinity;
+    [SerializeField]
+    GameObject muzzleFlash;
 
     [SerializeField]
     Gun defaultPistol;
     Gun activeGun;
     float timer;
+
+    [SerializeField]
+    Rigidbody2D rigidbody2D;
+    
 
     private void Start()
     {
@@ -48,7 +54,11 @@ public class PlayerController : MonoBehaviour
         {
             Fire();
         }
-       
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            rigidbody2D.AddForce(-transform.right*5, ForceMode2D.Impulse);
+        }
     }
 
     public void ChangeGun(Gun newGun)
@@ -68,10 +78,10 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator FillMagazineBar(float fireRate)
     {
-      
+
        
 
-        yield return new WaitForSeconds(0.01f);
+         yield return new WaitForSeconds(0.01f);
        
         magazineBar.fillAmount +=  0.01f/fireRate;
       
@@ -80,7 +90,7 @@ public class PlayerController : MonoBehaviour
        
         if (magazineBar.fillAmount<1)
         {
-            
+           
             StartCoroutine(FillMagazineBar(fireRate));
          
         }
@@ -118,6 +128,8 @@ public class PlayerController : MonoBehaviour
                 timer = Time.time + fireRate;
 
                 StartCoroutine(FillMagazineBar(fireRate));
+
+                muzzleFlash.SetActive(true);
             }
 
             else if(magazine>0)
@@ -127,6 +139,8 @@ public class PlayerController : MonoBehaviour
                 timer = Time.time + fireRate;
 
                 StartCoroutine(FillMagazineBar(fireRate));
+
+                muzzleFlash.SetActive(true);
             }
 
             else
