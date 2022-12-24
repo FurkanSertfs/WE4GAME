@@ -79,6 +79,10 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(Dash());
 
             }
+            else
+            {
+                dashButton.fillAmount = 0;
+            }
 
            
         }

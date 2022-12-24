@@ -8,9 +8,29 @@ public class CameraFollow : MonoBehaviour
     Transform target;
     [SerializeField]
     float speed;
+    [SerializeField]
+    bool offset;
+    [SerializeField]
+    Vector3 offsetVector;
+
+    private void Start()
+    {
+        
+       
+    }
+
 
     private void LateUpdate()
     {
-        transform.position = Vector3.Lerp(transform.position, new Vector3(target.position.x, target.position.y,transform.position.z) , speed);
+        if (offset)
+        {
+            transform.position = Vector3.Lerp(transform.position, new Vector3(target.position.x, target.position.y, transform.position.z)+offsetVector, speed);
+
+        }
+        else
+        {
+            transform.position = Vector3.Lerp(transform.position, new Vector3(target.position.x, target.position.y, transform.position.z), speed);
+
+        }
     }
 }
