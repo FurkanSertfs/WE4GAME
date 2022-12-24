@@ -8,10 +8,13 @@ using Deathmatch.io.Packets;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
+using System.Diagnostics;
 
 public class NetworkManager : MonoBehaviour
     {
-        //public fields
+    //public fields
+    private static Stopwatch stopwatch = new Stopwatch();
+
         public static NetworkManager instance;
         public bool isLocalPlayer;
         [HideInInspector] public ClientPlayer localPlayer;
@@ -89,7 +92,7 @@ public class NetworkManager : MonoBehaviour
         {
             netListener = new EventBasedNetListener();
             netPacketProcessor = new NetPacketProcessor();
-            Debug.Log("Connecting..");
+            UnityEngine.Debug.Log("Connecting..");
             netManager = new NetManager(netListener);
             netManager.Start();
             netManager.Connect(serverIP, port, connectionString);
@@ -102,14 +105,14 @@ public class NetworkManager : MonoBehaviour
             {
                 
                 this.server = server;
-                Debug.Log($"Network Manager: Connected to server.");
+                UnityEngine.Debug.Log($"Network Manager: Connected to server.");
                
             };
 
             netListener.NetworkReceiveEvent += (server, reader, deliveryMethod) =>
             {
                 netPacketProcessor.ReadAllPackets(reader, server);
-                Debug.Log("Network Manager: Packet arrived.");
+                UnityEngine.Debug.Log("Network Manager: Packet arrived.");
             };
 
 
@@ -168,16 +171,9 @@ public class NetworkManager : MonoBehaviour
         netPacketProcessor.SubscribeReusable<PingPongPacket>((packet) =>
         {
 
-
-            if (lastPing!=0)
-            {
-                
-            }
-
-            lastPing = Time.time;
-
-
-
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            stopwatch.Restart();
 
         });
 
@@ -216,18 +212,18 @@ public class NetworkManager : MonoBehaviour
         {
             netManager.Stop();
           
-            Debug.Log("Disconnected");
+            UnityEngine.Debug.Log("Disconnected");
             Destroy(gameObject);
         }
 
         private void NetListener_PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
         {
-            Debug.Log("Peer disconnected, reason: " + disconnectInfo.Reason);
+            UnityEngine.Debug.Log("Peer disconnected, reason: " + disconnectInfo.Reason);
         }
 
         private void NetListener_NetworkErrorEvent(System.Net.IPEndPoint endPoint, System.Net.Sockets.SocketError socketError)
         {
-            Debug.Log(socketError);
+            UnityEngine.Debug.Log(socketError);
         }
 
         void OnApplicationQuit()
@@ -255,7 +251,8 @@ public class NetworkManager : MonoBehaviour
             {
                 Id = localPlayerId
 
-            }, LiteNetLib.DeliveryMethod.ReliableOrdered); ;
+            }, LiteNetLib.DeliveryMethod.ReliableOrdered);
+            stopwatch.Start();
             }
         }
 }
