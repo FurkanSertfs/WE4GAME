@@ -28,6 +28,9 @@ public class PlayerController : MonoBehaviour
 
     float zoneTimer;
 
+    [SerializeField]
+    public Text nameText;
+
     public float zoneDamage;
 
     [SerializeField]
@@ -84,7 +87,8 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         ChangeGun(0);
-        
+
+        nameText.text = GameManager.instance.userName;
 
     }
 
@@ -375,6 +379,17 @@ public class PlayerController : MonoBehaviour
 
         }
 
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.GetComponent<ICollectable>()!=null)
+        {
+            Destroy(collision.gameObject);
+
+            collision.GetComponent<ICollectable>().Collect(this);
+
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)

@@ -279,6 +279,8 @@ public class NetworkManager : MonoBehaviour
 
             playerController.ChangeGun(packet.ActiveWeaponIdx);
 
+            playerController.nameText.text = packet.Username;
+
 
             GameManager.instance.clients.Add(packet.Id, newPlayer.GetComponent<ClientPlayer>());
         }
