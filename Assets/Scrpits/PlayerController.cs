@@ -26,7 +26,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     ChangeWeaponButton changeWeaponButton;
 
+    float zoneTimer;
 
+    public float zoneDamage;
 
     [SerializeField]
     float fireRate;
@@ -346,7 +348,31 @@ public class PlayerController : MonoBehaviour
                 Destroy(collision.gameObject);
             }
         }
-           
+
+        if (collision.GetComponent<Zone>()!=null)
+        {
+             
+
+            if (zoneTimer<Time.time)
+            {
+                TakeHit(zoneDamage);
+                zoneTimer = Time.time + 0.2f;
+
+                if (NetworkManager.instance.server != null)
+                {
+                    NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new PlayerHitPacket
+                    {
+                        receiverId = collision.GetComponentInParent<ClientPlayer>().Id,
+                        receivedDamage = zoneDamage,
+                        isProb = false
+                    }, LiteNetLib.DeliveryMethod.ReliableOrdered);
+
+
+                }
+            }
+
+        }
+
     }
 
     private void OnTriggerExit2D(Collider2D collision)

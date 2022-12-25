@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class RedArea : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public static RedArea instance;
+
+    public Zone[] zones;
+
+    private void Awake()
     {
-        
+        instance = this;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+  
+
+
 }
