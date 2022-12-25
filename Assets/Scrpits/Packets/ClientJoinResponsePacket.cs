@@ -12,5 +12,7 @@ namespace Deathmatch.io.Packets
         public bool Success { get; set; }
         public string Username { get; set; }
 
+        public int TotalZonePulse { get; set; }
+
     }
 }
