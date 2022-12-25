@@ -10,6 +10,13 @@ public class PlayerController : MonoBehaviour
     public GameObject bulletPrefab;
     [SerializeField]
     public Transform bulletSpawnPoint;
+   
+    public List<Collectables> collectables = new List<Collectables>();
+
+    public enum CollectibleObject { Wood, Rock, Armor, Hearth, SpeedBooster}
+
+
+
     
 
     [SerializeField]
@@ -33,6 +40,7 @@ public class PlayerController : MonoBehaviour
     char infinity;
     [SerializeField]
     GameObject muzzleFlash;
+
     
 
     
@@ -274,4 +282,16 @@ public class PlayerController : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
+}
+
+[System.Serializable]
+public class Collectables
+{
+    public PlayerController.CollectibleObject collectableObjects;
+
+    public int count;
+
+
+
+
 }
