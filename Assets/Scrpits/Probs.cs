@@ -14,6 +14,8 @@ public class Probs : MonoBehaviour, IDamageable
     [SerializeField]
     GameObject dropObject;
 
+    public int id;
+
     public void TakeHit(float damage)
     {
         health -= damage;

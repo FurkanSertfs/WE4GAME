@@ -146,6 +146,12 @@ public class NetworkManager : MonoBehaviour
         netPacketProcessor.SubscribeReusable<PlayerHitPacket>((packet) =>
         {
             GameManager.instance.clients[packet.receiverId].GetComponentInChildren<PlayerController>().TakeHit(packet.receivedDamage);
+
+            if (packet.isProb)
+            {
+                ProbManager.instance.probs[packet.receiverId].GetComponent<Probs>().TakeHit(packet.receivedDamage);
+            }
+
         });
 
         netPacketProcessor.SubscribeReusable<NewUserPacket>((packet) =>
