@@ -13,19 +13,25 @@ public class EnterGame : MonoBehaviour
 
     public string playerName;
 
+    bool isPressed;
+
     public void EnterGameButton()
     {
 
 
         if (NetworkManager.instance.server != null)
         {
-
-
-            NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new ClientJoinRequestPacket
+            if (!isPressed)
             {
-                Username = playerName
+                isPressed = true;
+                NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new ClientJoinRequestPacket
+                {
+                    Username = playerName
 
-            }, LiteNetLib.DeliveryMethod.ReliableOrdered);
+                }, LiteNetLib.DeliveryMethod.ReliableOrdered);
+            }
+
+           
         }
     }
 

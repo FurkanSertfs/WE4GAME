@@ -19,7 +19,6 @@ public class MuzzleFlash : MonoBehaviour
 
     void NextFrame()
     {
-        Debug.Log("1");
         spriteRenderer.sprite = sprites[nextFrame];
         nextFrame++;
         nextFrame =nextFrame % sprites.Length;

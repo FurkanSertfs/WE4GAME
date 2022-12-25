@@ -4,12 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using Deathmatch.io.Packets;
 
-public class PlayerController : MonoBehaviour,IDamageable
+public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     public GameObject bulletPrefab;
     [SerializeField]
     public Transform bulletSpawnPoint;
+    
 
     [SerializeField]
     FireButton fireButton;
@@ -34,13 +35,15 @@ public class PlayerController : MonoBehaviour,IDamageable
     GameObject muzzleFlash;
     
 
+    
+
     [SerializeField]
     Gun defaultPistol;
     Gun activeGun;
     float timer;
 
     [SerializeField]
-    GameObject tailRenderer;
+    public GameObject tailRenderer;
     [SerializeField]
     float dashCooldown;
     float dashTimer;
@@ -52,12 +55,16 @@ public class PlayerController : MonoBehaviour,IDamageable
 
 
     [SerializeField]
-    float health;
+    public float health;
+    public float maxhealth;
 
+    [SerializeField]
+    Image healthBar;
 
     private void Start()
     {
         ChangeGun(defaultPistol);
+        
 
     }
 
@@ -100,8 +107,32 @@ public class PlayerController : MonoBehaviour,IDamageable
        
        
     }
+  public  IEnumerator DashAnim()
+    {
+        tailRenderer.SetActive(true);
+        yield return new WaitForSeconds(0.15f);
+        tailRenderer.SetActive(false);
+
+    }
+
     IEnumerator Dash()
     {
+
+        if (NetworkManager.instance.server != null)
+        {
+            NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new ClientMovementPacket
+            {
+                PositionX = transform.position.x,
+                PositionY = transform.position.y,
+                PositionZ = transform.position.z,
+                Rotation = transform.eulerAngles.z,
+                IsDash = true
+                
+
+            }, LiteNetLib.DeliveryMethod.ReliableOrdered);
+        }
+
+
         rigidbody2D.velocity = (transform.up * 15);
         tailRenderer.SetActive(true);
         yield return new WaitForSeconds(0.12f);
@@ -236,9 +267,11 @@ public class PlayerController : MonoBehaviour,IDamageable
     {
         health -= damage;
 
+        healthBar.fillAmount = health / maxhealth;
+
         if (health<=0)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 }

@@ -143,16 +143,16 @@ public class NetworkManager : MonoBehaviour
 
         });
 
+        netPacketProcessor.SubscribeReusable<PlayerHitPacket>((packet) =>
+        {
+            GameManager.instance.clients[packet.receiverId].GetComponentInChildren<PlayerController>().TakeHit(packet.receivedDamage);
+        });
+
         netPacketProcessor.SubscribeReusable<NewUserPacket>((packet) =>
         {
-
+            
             StartCoroutine(Wait(packet));
           
-
-
-          
-         
-
         });
 
         netPacketProcessor.SubscribeReusable<NewBulletPacket>((packet) =>
@@ -172,6 +172,11 @@ public class NetworkManager : MonoBehaviour
         {
             if (GameManager.instance.clients.ContainsKey(packet.Id))
             {
+                if (packet.IsDash)
+                {
+                    GameManager.instance.clients[packet.Id].GetComponentInChildren<PlayerController>().StartCoroutine(GameManager.instance.clients[packet.Id].GetComponentInChildren<PlayerController>().DashAnim());
+                }
+
 
                 //  GameManager.instance.clients[packet.Id].GetComponentInChildren<PlayerController>().gameObject.transform.position  = new Vector3(packet.PositionX, packet.PositionY, packet.PositionZ);
 

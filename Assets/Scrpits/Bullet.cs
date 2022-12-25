@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Deathmatch.io.Packets;
 
 public class Bullet : MonoBehaviour
 {
@@ -23,6 +24,21 @@ public class Bullet : MonoBehaviour
             collision.GetComponent<IDamageable>().TakeHit(damage);
 
             Destroy(gameObject);
+        }
+
+        if (collision.GetComponent<PlayerController>()!=null)
+        {
+            if (NetworkManager.instance.server != null)
+            {
+                NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new PlayerHitPacket
+                {
+                   receiverId = collision.GetComponentInParent<ClientPlayer>().Id,
+                   receivedDamage = damage,
+                }, LiteNetLib.DeliveryMethod.ReliableOrdered);
+
+                Destroy(gameObject);
+            }
+
         }
     }
 }

@@ -13,5 +13,7 @@ namespace Deathmatch.io.Packets
         public float PositionY { get; set; }
         public float PositionZ { get; set; }
         public float Rotation { get; set; }
+
+        public bool IsDash { get; set; }
     }
 }

@@ -241,7 +241,7 @@ GameObject:
   - component: {fileID: 437828101104809926}
   - component: {fileID: 437828101104809927}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1706,6 +1706,8 @@ MonoBehaviour:
   dashButton: {fileID: 1302981269059150956}
   rigidbody2D: {fileID: 1302981269697965351}
   health: 100
+  maxhealth: 100
+  healthBar: {fileID: 437828101104809927}
 --- !u!61 &1302981269697965354
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2285,7 +2287,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1302981270908198587
 Transform:
   m_ObjectHideFlags: 0
