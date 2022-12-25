@@ -21,9 +21,20 @@ public class Bullet : MonoBehaviour
     {
         if (collision.GetComponent<IDamageable>()!=null)
         {
-            collision.GetComponent<IDamageable>().TakeHit(damage);
 
-            Destroy(gameObject);
+            if (NetworkManager.instance.server != null)
+            {
+                NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new PlayerHitPacket
+                {
+                    receiverId = collision.GetComponentInParent<Probs>().id,
+                    receivedDamage = damage,
+                }, LiteNetLib.DeliveryMethod.ReliableOrdered); 
+
+                Destroy(gameObject);
+            }
+
+
+           
         }
 
         if (collision.GetComponent<PlayerController>()!=null)
