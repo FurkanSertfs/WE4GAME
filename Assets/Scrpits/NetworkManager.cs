@@ -145,6 +145,17 @@ public class NetworkManager : MonoBehaviour
 
         });
 
+        netPacketProcessor.SubscribeReusable<RedZonePacket>((packet) =>
+        {
+            for (int i = 0; i < RedArea.instance.zones.Length; i++)
+            {
+                RedArea.instance.zones[i].isActive = packet.isMoving;
+            }
+
+
+        });
+
+
         netPacketProcessor.SubscribeReusable<PlayerHitPacket>((packet) =>
         {
 
