@@ -22,6 +22,8 @@ public class NetworkManager : MonoBehaviour
         [HideInInspector] public ClientPlayer localPlayer;
         [HideInInspector] public int localPlayerId;
 
+        public string[] ranks;
+
         public NetPeer server;
         public NetPacketProcessor netPacketProcessor;
         public Dictionary<int, ClientPlayer> clients;
@@ -131,6 +133,11 @@ public class NetworkManager : MonoBehaviour
                 GameManager.instance.id = packet.Id;
                 GameManager.instance.userName = packet.Username;
                 GameManager.instance.isLocal = true;
+
+                StartCoroutine(ZoneWait(packet));
+
+               
+
             }
 
         });
@@ -215,9 +222,25 @@ public class NetworkManager : MonoBehaviour
 
 
 
+        });
+
+
+        netPacketProcessor.SubscribeReusable<GameEndPacket>((packet) =>
+        {
+            UnityEngine.Debug.Log("Paket geldi");
+            SceneManager.LoadScene(2);
+
+            ranks = packet.RanksNames;
+
+            
+
 
 
         });
+
+
+
+
 
 
         netPacketProcessor.SubscribeReusable<ServerMovementPacket>((packet) =>
@@ -257,8 +280,27 @@ public class NetworkManager : MonoBehaviour
 
     }
 
+    IEnumerator ZoneWait(ClientJoinResponsePacket packet)
+    {
+        yield return new WaitForSeconds(0.3f);
 
-    IEnumerator Wait(NewUserPacket packet)
+
+        if (SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            for (int i = 0; i < RedArea.instance.zones.Length; i++)
+            {
+                RedArea.instance.zones[i].transform.position += RedArea.instance.zones[i].position * RedArea.instance.zones[i].speed * 2 * packet.TotalZonePulse;
+            }
+        }
+
+        else
+        {
+            StartCoroutine(ZoneWait(packet));
+        }
+    }
+
+
+            IEnumerator Wait(NewUserPacket packet)
     {
         yield return new WaitForSeconds(0.3f);
 
