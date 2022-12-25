@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
 using System.Diagnostics;
+using DG.Tweening;
 
 public class NetworkManager : MonoBehaviour
     {
@@ -154,14 +155,33 @@ public class NetworkManager : MonoBehaviour
 
         });
 
+        netPacketProcessor.SubscribeReusable<NewBulletPacket>((packet) =>
+        {
+
+            PlayerController playerController = GameManager.instance.clients[packet.OwnerId].GetComponentInChildren<PlayerController>();
+
+
+            GameObject newBullet = Instantiate(playerController.bulletPrefab, playerController.bulletSpawnPoint.position, playerController.bulletSpawnPoint.rotation);
+
+
+
+        });
+
+
         netPacketProcessor.SubscribeReusable<ServerMovementPacket>((packet) =>
         {
             if (GameManager.instance.clients.ContainsKey(packet.Id))
             {
-                GameManager.instance.clients[packet.Id].gameObject.transform.position
-          = Vector3.Lerp(GameManager.instance.clients[packet.Id].gameObject.transform.position, new Vector3(packet.PositionX, packet.PositionY, packet.PositionZ), lerpSpeed);
 
-                GameManager.instance.clients[packet.Id].gameObject.transform.eulerAngles = new Vector3(0, 0, packet.Rotation);
+                //  GameManager.instance.clients[packet.Id].GetComponentInChildren<PlayerController>().gameObject.transform.position  = new Vector3(packet.PositionX, packet.PositionY, packet.PositionZ);
+
+                GameManager.instance.clients[packet.Id].GetComponentInChildren<PlayerController>().gameObject.transform.DOMove(new Vector3(packet.PositionX, packet.PositionY, packet.PositionZ),lerpSpeed);
+
+
+                //      GameManager.instance.clients[packet.Id].GetComponentInChildren<PlayerController>().gameObject.transform.position
+                //= Vector3.Lerp(GameManager.instance.clients[packet.Id].GetComponentInChildren<PlayerController>().gameObject.transform.position, new Vector3(packet.PositionX, packet.PositionY, packet.PositionZ), lerpSpeed);
+
+                GameManager.instance.clients[packet.Id].GetComponentInChildren<PlayerController>().gameObject.transform.DORotate(new Vector3(0, 0, packet.Rotation),lerpSpeed);
 
             }
 
@@ -183,7 +203,7 @@ public class NetworkManager : MonoBehaviour
 
     IEnumerator Wait(NewUserPacket packet)
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.3f);
 
 
         if (SceneManager.GetActiveScene().buildIndex==1)
@@ -245,14 +265,14 @@ public class NetworkManager : MonoBehaviour
                 netManager.PollEvents();
             }
 
-            if (NetworkManager.instance.server != null)
-            {
-            NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new PingPongPacket
-            {
-                Id = localPlayerId
+            //if (NetworkManager.instance.server != null)
+            //{
+            //NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new PingPongPacket
+            //{
+            //    Id = localPlayerId
 
-            }, LiteNetLib.DeliveryMethod.ReliableOrdered);
-            stopwatch.Start();
-            }
+            //}, LiteNetLib.DeliveryMethod.ReliableOrdered);
+            //stopwatch.Start();
+            //}
         }
 }

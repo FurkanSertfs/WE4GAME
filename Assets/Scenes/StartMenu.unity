@@ -701,9 +701,9 @@ MonoBehaviour:
   serverIP: 172.20.10.2
   port: 9050
   connectionString: secretKey
-  ClientPrefab: {fileID: 1302981270044287718, guid: 54d92be3e85bf7542807b5dd553ddd26, type: 3}
+  ClientPrefab: {fileID: 1302981270044287718, guid: 2b396bb2a976219409bca86e9de85f0a, type: 3}
   inputField: {fileID: 1642649768}
-  lerpSpeed: 5
+  lerpSpeed: 0.1
   playerName: 
 --- !u!4 &1621742127
 Transform:

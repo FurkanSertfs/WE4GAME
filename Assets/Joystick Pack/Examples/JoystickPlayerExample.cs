@@ -34,23 +34,23 @@ public class JoystickPlayerExample : MonoBehaviour
 
         rigidbody.position = (rigidbody.position + move.normalized * speed * Time.deltaTime);
 
-        //if (NetworkManager.instance.server!=null)
-        //{
-        //    NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new ClientMovementPacket
-        //    {
-        //        PositionX = transform.position.x,
-        //        PositionY = transform.position.y,
-        //        PositionZ = transform.position.z,
-        //        Rotation = transform.eulerAngles.z
+        if (NetworkManager.instance.server != null)
+        {
+            NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new ClientMovementPacket
+            {
+                PositionX = transform.position.x,
+                PositionY = transform.position.y,
+                PositionZ = transform.position.z,
+                Rotation = transform.eulerAngles.z
 
-        //    }, LiteNetLib.DeliveryMethod.ReliableOrdered);
-        //}
-        //else
-        //{
-        //    Debug.Log("Server yok haci");
-        //}
+            }, LiteNetLib.DeliveryMethod.ReliableOrdered);
+        }
+        else
+        {
+            Debug.Log("Server yok haci");
+        }
 
-        
+
 
     }
 }

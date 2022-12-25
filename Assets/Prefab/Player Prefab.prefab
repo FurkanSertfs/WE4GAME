@@ -1618,6 +1618,7 @@ MonoBehaviour:
   dashCooldown: 3
   dashButton: {fileID: 1302981269059150956}
   rigidbody2D: {fileID: 1302981269697965351}
+  health: 100
 --- !u!61 &1302981269697965354
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1773,6 +1774,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07b0630fa8357454b8ffc119f98136d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Id: 0
   canvas: {fileID: 437828101895265001}
   mainCamera: {fileID: 437828102114424194}
 --- !u!1 &1302981270275911453

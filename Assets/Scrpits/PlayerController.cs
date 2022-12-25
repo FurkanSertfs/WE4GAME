@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Deathmatch.io.Packets;
 
-
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour,IDamageable
 {
     [SerializeField]
-    GameObject bulletPrefab;
+    public GameObject bulletPrefab;
     [SerializeField]
-    Transform bulletSpawnPoint;
+    public Transform bulletSpawnPoint;
 
     [SerializeField]
     FireButton fireButton;
@@ -49,7 +49,11 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     Rigidbody2D rigidbody2D;
-    
+
+
+    [SerializeField]
+    float health;
+
 
     private void Start()
     {
@@ -176,6 +180,18 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(FillMagazineBar(fireRate));
 
                 muzzleFlash.SetActive(true);
+
+                if (NetworkManager.instance.server != null)
+                {
+                    NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new NewBulletPacket
+                    {
+                        PositionX = bulletSpawnPoint.position.x,
+                        PositionY = bulletSpawnPoint.position.y,
+                        Rotation = bulletSpawnPoint.transform.eulerAngles.z
+                        
+
+                    }, LiteNetLib.DeliveryMethod.ReliableOrdered);
+                }
             }
 
             else if(magazine>0)
@@ -187,6 +203,17 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(FillMagazineBar(fireRate));
 
                 muzzleFlash.SetActive(true);
+
+                if (NetworkManager.instance.server != null)
+                {
+                    NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new NewBulletPacket
+                    {
+                        PositionX = bulletSpawnPoint.position.x,
+                        PositionY = bulletSpawnPoint.position.y,
+                        Rotation = bulletSpawnPoint.transform.eulerAngles.z
+
+                    }, LiteNetLib.DeliveryMethod.ReliableOrdered);
+                }
             }
 
             else
@@ -203,5 +230,15 @@ public class PlayerController : MonoBehaviour
       
         
 
+    }
+
+    public void TakeHit(float damage)
+    {
+        health -= damage;
+
+        if (health<=0)
+        {
+            Destroy(gameObject);
+        }
     }
 }

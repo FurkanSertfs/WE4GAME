@@ -4,12 +4,14 @@ using UnityEngine;
     public class ClientPlayer:MonoBehaviour
     {
         private NetPeer Peer;
-        public int Id { get; set; }
+        [SerializeField]
+        public int Id;
         public string Username { get; set; }
 
         public GameObject canvas, mainCamera;
 
 
+    
 
 
     public ClientPlayer(NetPeer Peer, string Username, int Id)
