@@ -355,19 +355,21 @@ public class PlayerController : MonoBehaviour
 
             if (zoneTimer<Time.time)
             {
-                TakeHit(zoneDamage);
+               // TakeHit(zoneDamage);
                 zoneTimer = Time.time + 0.2f;
+
+                Debug.Log("Hasar Aldim disari");
 
                 if (NetworkManager.instance.server != null)
                 {
                     NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new PlayerHitPacket
                     {
-                        receiverId = collision.GetComponentInParent<ClientPlayer>().Id,
+                        receiverId = GetComponentInParent<ClientPlayer>().Id,
                         receivedDamage = zoneDamage,
                         isProb = false
                     }, LiteNetLib.DeliveryMethod.ReliableOrdered);
 
-
+                    Debug.Log("Hasar Aldim iceri");
                 }
             }
 

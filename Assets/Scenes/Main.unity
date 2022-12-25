@@ -1758,7 +1758,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isActive: 0
   position: {x: -2, y: 0, z: 0}
-  speed: 0.2
+  speed: 0.354
 --- !u!61 &526909946
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4952,7 +4952,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isActive: 0
   position: {x: 2, y: 0, z: 0}
-  speed: 0.2
+  speed: 0.354
 --- !u!61 &1847166430
 BoxCollider2D:
   m_ObjectHideFlags: 0

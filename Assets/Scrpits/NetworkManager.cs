@@ -152,6 +152,7 @@ public class NetworkManager : MonoBehaviour
                 RedArea.instance.zones[i].isActive = packet.isMoving;
             }
 
+            GameManager.instance.clients[localPlayerId].GetComponentInChildren<PlayerController>().zoneDamage = packet.Damage;
 
         });
 
