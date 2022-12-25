@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireRate: 0.2
   damage: 10
-  magazine: 30
+  magazine: 75
   unLimited: 0
-  defaultGun: 1
+  defaultGun: 0
+  bulletSpawnPoint: {fileID: 0}
+  gunPreFab: {fileID: 0}
+  MuzzleFlash: {fileID: 0}

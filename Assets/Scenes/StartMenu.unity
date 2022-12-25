@@ -698,7 +698,7 @@ MonoBehaviour:
   isLocalPlayer: 0
   localPlayer: {fileID: 0}
   localPlayerId: 0
-  serverIP: 172.20.10.2
+  serverIP: 192.168.43.70
   port: 9050
   connectionString: secretKey
   ClientPrefab: {fileID: 1302981270044287718, guid: 2b396bb2a976219409bca86e9de85f0a, type: 3}

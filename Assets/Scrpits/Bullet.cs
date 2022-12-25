@@ -27,7 +27,7 @@ public class Bullet : MonoBehaviour
                 NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new PlayerHitPacket
                 {
                     receiverId = collision.GetComponentInParent<Probs>().id,
-                    receivedDamage = damage,
+                    receivedDamage = damage,isProb=true
                 }, LiteNetLib.DeliveryMethod.ReliableOrdered); 
 
                 Destroy(gameObject);
@@ -44,7 +44,7 @@ public class Bullet : MonoBehaviour
                 NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new PlayerHitPacket
                 {
                    receiverId = collision.GetComponentInParent<ClientPlayer>().Id,
-                   receivedDamage = damage,
+                   receivedDamage = damage,isProb=false
                 }, LiteNetLib.DeliveryMethod.ReliableOrdered);
 
                 Destroy(gameObject);

@@ -145,11 +145,19 @@ public class NetworkManager : MonoBehaviour
 
         netPacketProcessor.SubscribeReusable<PlayerHitPacket>((packet) =>
         {
-            GameManager.instance.clients[packet.receiverId].GetComponentInChildren<PlayerController>().TakeHit(packet.receivedDamage);
 
             if (packet.isProb)
             {
-                ProbManager.instance.probs[packet.receiverId].GetComponent<Probs>().TakeHit(packet.receivedDamage);
+                if (ProbManager.instance.probs[packet.receiverId].GetComponent<Probs>()!=null)
+                {
+                    ProbManager.instance.probs[packet.receiverId].GetComponent<Probs>().TakeHit(packet.receivedDamage);
+                }
+              
+            }
+            else
+            {
+                GameManager.instance.clients[packet.receiverId].GetComponentInChildren<PlayerController>().TakeHit(packet.receivedDamage);
+
             }
 
         });
@@ -166,8 +174,24 @@ public class NetworkManager : MonoBehaviour
 
             PlayerController playerController = GameManager.instance.clients[packet.OwnerId].GetComponentInChildren<PlayerController>();
 
+            for (int i = 0; i < playerController.bulletSpawnPoint.Length; i++)
+            {
+                GameObject newBullet = Instantiate(playerController.bulletPrefab, playerController.bulletSpawnPoint[i].position, playerController.bulletSpawnPoint[i].rotation);
+            }
 
-            GameObject newBullet = Instantiate(playerController.bulletPrefab, playerController.bulletSpawnPoint.position, playerController.bulletSpawnPoint.rotation);
+            
+
+
+
+        });
+
+        netPacketProcessor.SubscribeReusable<WeaponChangePacket>((packet) =>
+        {
+            PlayerController playerController = GameManager.instance.clients[packet.OwnerId].GetComponentInChildren<PlayerController>();
+
+            playerController.ChangeGun(packet.ActiveWeaponIdx);
+
+
 
 
 

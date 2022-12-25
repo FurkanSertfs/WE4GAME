@@ -10,7 +10,7 @@ public class Collectables : MonoBehaviour, ICollectable
     {
         for (int i = 0; i < playerController.collectables.Count; i++)
         {
-            if (playerController.collectables[i].collectableType == collectableType)
+            if (playerController.collectables[i].collectableObjects == collectableType)
             {
                 playerController.collectables[i].count++;
                 Destroy(gameObject);
