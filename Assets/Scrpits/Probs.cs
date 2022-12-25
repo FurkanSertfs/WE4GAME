@@ -12,7 +12,9 @@ public class Probs : MonoBehaviour, IDamageable
     Transform dropObjectSpawnPoint;
 
     [SerializeField]
-    GameObject dropObject;
+    public GameObject dropObject1;
+    public GameObject dropObject2;
+    public GameObject dropObject3;
 
     public int id;
 
@@ -25,8 +27,25 @@ public class Probs : MonoBehaviour, IDamageable
 
         if (health<=0)
         {
-            Instantiate(dropObject, dropObjectSpawnPoint.position, dropObjectSpawnPoint.rotation);
             Destroy(gameObject);
+            float randomChance = Random.Range(0, 100f);
+            if (randomChance <= 25)
+            {
+                Instantiate(dropObject1, dropObjectSpawnPoint.position, dropObjectSpawnPoint.rotation);
+            }
+            else if (randomChance < 50)
+            {
+                Instantiate(dropObject2, transform.position, transform.rotation);
+
+
+            }
+            else if (randomChance < 100)
+            {
+                Instantiate(dropObject3, transform.position, transform.rotation);
+            }
+
+
+
         }
 
     }
