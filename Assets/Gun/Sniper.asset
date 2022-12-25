@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4659dd699ce4f640829f5286ae73ce0, type: 3}
   m_Name: Sniper
   m_EditorClassIdentifier: 
-  fireRate: 0.2
-  damage: 10
+  fireRate: 1
+  damage: 100
   magazine: 30
   unLimited: 0
-  defaultGun: 1
+  defaultGun: 0
   bulletSpawnPoint: {fileID: 0}
   gunPreFab: {fileID: 211476526425335274, guid: 438a1ae54f3bc0543b0f6ee659cd92ff, type: 3}
   MuzzleFlash: {fileID: 0}

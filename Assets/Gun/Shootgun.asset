@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4659dd699ce4f640829f5286ae73ce0, type: 3}
-  m_Name: Pistol
+  m_Name: Shootgun
   m_EditorClassIdentifier: 
-  fireRate: 0.2
+  fireRate: 0.75
   damage: 10
   magazine: 30
-  unLimited: 1
-  defaultGun: 1
+  unLimited: 0
+  defaultGun: 0
   bulletSpawnPoint: {fileID: 0}
   gunPreFab: {fileID: 0}
   MuzzleFlash: {fileID: 0}

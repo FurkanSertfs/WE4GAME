@@ -9,9 +9,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     public GameObject bulletPrefab;
     [SerializeField]
-    public Transform bulletSpawnPoint;
+    public Transform[] bulletSpawnPoint;
    
-    public List<Collectables> collectables = new List<Collectables>();
+    public List<Collectable> collectables = new List<Collectable>();
 
     public enum CollectibleObject { Wood, Rock, Armor, Hearth, SpeedBooster}
 
@@ -23,6 +23,10 @@ public class PlayerController : MonoBehaviour
     FireButton fireButton;
     [SerializeField]
     DashButton dashgButton;
+    [SerializeField]
+    ChangeWeaponButton changeWeaponButton;
+
+
 
     [SerializeField]
     float fireRate;
@@ -45,8 +49,8 @@ public class PlayerController : MonoBehaviour
 
     
 
-    [SerializeField]
-    Gun defaultPistol;
+    
+    public EnvanterGun[] envanterGuns;
     Gun activeGun;
     float timer;
 
@@ -69,9 +73,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     Image healthBar;
 
+    [SerializeField]
+    GameObject changeWeaponButtonObject;
+
+
     private void Start()
     {
-        ChangeGun(defaultPistol);
+        ChangeGun(0);
         
 
     }
@@ -150,13 +158,39 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    public void ChangeGun(Gun newGun)
+    public void ChangeGun(int index)
     {
-        fireRate = newGun.fireRate;
-        damage = newGun.damage;
-        magazine = newGun.magazine;
-        unlimitedMagazine = newGun.unLimited;
-        defaultGun = newGun.defaultGun;
+
+        for (int i = 0; i < envanterGuns.Length; i++)
+        {
+            envanterGuns[i].gameObject.SetActive(false);
+        }
+        EnvanterGun newGun = envanterGuns[index];
+        newGun.gameObject.SetActive(true);
+
+        fireRate = newGun.gun.fireRate;
+        damage = newGun.gun.damage;
+        magazine = newGun.gun.magazine;
+        unlimitedMagazine = newGun.gun.unLimited;
+        defaultGun = newGun.gun.defaultGun;
+        bulletPrefab = newGun.bulletPrefab;
+        bulletSpawnPoint = newGun.bullletPoints;
+        muzzleFlash = newGun.muzzleFlash;
+
+        if (NetworkManager.instance.server != null)
+        {
+
+
+            NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new WeaponChangePacket
+            {
+                OwnerId = GetComponentInParent<ClientPlayer>().Id,
+                ActiveWeaponIdx= index
+
+
+
+            }, LiteNetLib.DeliveryMethod.ReliableOrdered);
+        }
+
 
     }
 
@@ -212,52 +246,68 @@ public class PlayerController : MonoBehaviour
 
             if (unlimitedMagazine)
             {
-                GameObject newBullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
-
-                timer = Time.time + fireRate;
-
-                StartCoroutine(FillMagazineBar(fireRate));
-
-                muzzleFlash.SetActive(true);
-
-                if (NetworkManager.instance.server != null)
+                for (int i = 0; i < bulletSpawnPoint.Length; i++)
                 {
-                    NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new NewBulletPacket
-                    {
-                        PositionX = bulletSpawnPoint.position.x,
-                        PositionY = bulletSpawnPoint.position.y,
-                        Rotation = bulletSpawnPoint.transform.eulerAngles.z
-                        
+                    GameObject newBullet = Instantiate(bulletPrefab, bulletSpawnPoint[i].position, bulletSpawnPoint[i].rotation);
 
-                    }, LiteNetLib.DeliveryMethod.ReliableOrdered);
+                    timer = Time.time + fireRate;
+
+                    StartCoroutine(FillMagazineBar(fireRate));
+
+                    muzzleFlash.SetActive(true);
+
+                    if (NetworkManager.instance.server != null)
+                    {
+
+
+                        NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new NewBulletPacket
+                        {
+                            PositionX = bulletSpawnPoint[i].position.x,
+                            PositionY = bulletSpawnPoint[i].position.y,
+                            Rotation = bulletSpawnPoint[i].transform.eulerAngles.z
+
+
+                        }, LiteNetLib.DeliveryMethod.ReliableOrdered);
+                    }
+
                 }
+
+
+               
             }
 
             else if(magazine>0)
             {
-                GameObject newBullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
-
-                timer = Time.time + fireRate;
-
-                StartCoroutine(FillMagazineBar(fireRate));
-
-                muzzleFlash.SetActive(true);
-
-                if (NetworkManager.instance.server != null)
+                for (int i = 0; i < bulletSpawnPoint.Length; i++)
                 {
-                    NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new NewBulletPacket
-                    {
-                        PositionX = bulletSpawnPoint.position.x,
-                        PositionY = bulletSpawnPoint.position.y,
-                        Rotation = bulletSpawnPoint.transform.eulerAngles.z
+                    GameObject newBullet = Instantiate(bulletPrefab, bulletSpawnPoint[i].position, bulletSpawnPoint[i].rotation);
 
-                    }, LiteNetLib.DeliveryMethod.ReliableOrdered);
+                    timer = Time.time + fireRate;
+
+                    StartCoroutine(FillMagazineBar(fireRate));
+
+                    muzzleFlash.SetActive(true);
+
+                    if (NetworkManager.instance.server != null)
+                    {
+
+
+                        NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new NewBulletPacket
+                        {
+                            PositionX = bulletSpawnPoint[i].position.x,
+                            PositionY = bulletSpawnPoint[i].position.y,
+                            Rotation = bulletSpawnPoint[i].transform.eulerAngles.z
+
+
+                        }, LiteNetLib.DeliveryMethod.ReliableOrdered);
+                    }
+
                 }
             }
 
             else
             {
-                ChangeGun(defaultPistol);
+                ChangeGun(0);
             }
 
            
@@ -269,6 +319,28 @@ public class PlayerController : MonoBehaviour
       
         
 
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.GetComponent<CollecTableGun>()!=null)
+        {
+            changeWeaponButtonObject.SetActive(true);
+            if (changeWeaponButton.isPressed)
+            {
+                ChangeGun(collision.GetComponent<CollecTableGun>().index);
+                Destroy(collision.gameObject);
+            }
+        }
+           
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.GetComponent<CollecTableGun>() != null)
+        {
+            changeWeaponButtonObject.SetActive(false);
+        }
     }
 
     public void TakeHit(float damage)
@@ -285,7 +357,7 @@ public class PlayerController : MonoBehaviour
 }
 
 [System.Serializable]
-public class Collectables
+public class Collectable
 {
     public PlayerController.CollectibleObject collectableObjects;
 
