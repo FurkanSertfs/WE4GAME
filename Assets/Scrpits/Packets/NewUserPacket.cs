@@ -12,5 +12,9 @@ namespace Deathmatch.io.Packets
         public int Id { get; set;}
 
         public string Username { get; set;}
+
+        public float Health { get; set; }
+
+        public int ActiveWeaponIdx { get; set; }
     }
 }

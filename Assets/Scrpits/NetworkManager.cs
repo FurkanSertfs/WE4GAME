@@ -11,6 +11,7 @@ using System.Collections;
 using System.Diagnostics;
 using DG.Tweening;
 
+
 public class NetworkManager : MonoBehaviour
     {
     //public fields
@@ -129,6 +130,7 @@ public class NetworkManager : MonoBehaviour
             {
                 GameManager.instance.id = packet.Id;
                 GameManager.instance.userName = packet.Username;
+                GameManager.instance.isLocal = true;
             }
 
         });
@@ -166,6 +168,8 @@ public class NetworkManager : MonoBehaviour
         {
             
             StartCoroutine(Wait(packet));
+
+
           
         });
 
@@ -177,6 +181,12 @@ public class NetworkManager : MonoBehaviour
             for (int i = 0; i < playerController.bulletSpawnPoint.Length; i++)
             {
                 GameObject newBullet = Instantiate(playerController.bulletPrefab, playerController.bulletSpawnPoint[i].position, playerController.bulletSpawnPoint[i].rotation);
+
+                newBullet.GetComponent<Bullet>().damage = GameManager.instance.clients[packet.OwnerId].GetComponentInChildren<PlayerController>().damage;
+
+
+                newBullet.GetComponent<Bullet>().id = localPlayerId;
+
             }
 
             
@@ -245,9 +255,17 @@ public class NetworkManager : MonoBehaviour
         {
             GameObject newPlayer = Instantiate(ClientPrefab, Vector3.zero, Quaternion.identity);
 
+            PlayerController playerController = newPlayer.GetComponentInChildren<PlayerController>();
+
             newPlayer.GetComponent<ClientPlayer>().Id = packet.Id;
 
             newPlayer.GetComponent<ClientPlayer>().Username = packet.Username;
+
+            playerController.health = packet.Health;
+
+            playerController.healthBar.fillAmount = playerController.health / playerController.maxhealth;
+
+            playerController.ChangeGun(packet.ActiveWeaponIdx);
 
 
             GameManager.instance.clients.Add(packet.Id, newPlayer.GetComponent<ClientPlayer>());

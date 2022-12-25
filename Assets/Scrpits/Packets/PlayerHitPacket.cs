@@ -11,5 +11,7 @@ namespace Deathmatch.io.Packets
         public int receiverId { get; set; }
         public float receivedDamage { get; set; }
         public bool isProb { get; set; }
+
+      //public int AttackerId { get; set; }
     }
 }
