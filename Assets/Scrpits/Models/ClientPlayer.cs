@@ -2,7 +2,7 @@
 using UnityEngine;
 
     public class ClientPlayer:MonoBehaviour
-    {
+{
         private NetPeer Peer;
         [SerializeField]
         public int Id;
@@ -10,6 +10,7 @@ using UnityEngine;
 
         public GameObject canvas, mainCamera;
 
+        public bool isLocal;
 
     
 

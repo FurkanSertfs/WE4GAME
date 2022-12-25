@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
 
     public int gameDuration;
 
-    public bool gameStarted;
+    public bool gameStarted,isLocal;
 
     [SerializeField]
     GameObject playerPrefab;
@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour
             newPlayer.GetComponent<ClientPlayer>().mainCamera.SetActive(true);
             newPlayer.GetComponent<ClientPlayer>().GetComponentInChildren<JoystickPlayerExample>().enabled = true;
             newPlayer.GetComponent<ClientPlayer>().GetComponentInChildren<PlayerController>().enabled = true;
+            newPlayer.GetComponent<ClientPlayer>().isLocal = true;
 
 
             clients.Add(newPlayer.GetComponent<ClientPlayer>().Id, newPlayer.GetComponent<ClientPlayer>());

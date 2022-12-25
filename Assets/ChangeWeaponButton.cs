@@ -17,4 +17,9 @@ public class ChangeWeaponButton : MonoBehaviour, IPointerClickHandler, IPointerD
     {
         isPressed = true;
     }
+
+    private void OnDisable()
+    {
+        isPressed = false;
+    }
 }

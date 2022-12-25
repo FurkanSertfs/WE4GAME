@@ -10,6 +10,7 @@ public class Bullet : MonoBehaviour
 
     public float damage;
 
+    public int id;
     private void Start()
     {
         GetComponent<Rigidbody2D>().AddForce(transform.up *speed, ForceMode2D.Impulse);
@@ -30,25 +31,34 @@ public class Bullet : MonoBehaviour
                     receivedDamage = damage,isProb=true
                 }, LiteNetLib.DeliveryMethod.ReliableOrdered); 
 
-                Destroy(gameObject);
             }
 
+            Destroy(gameObject);
 
-           
+
         }
 
         if (collision.GetComponent<PlayerController>()!=null)
         {
-            if (NetworkManager.instance.server != null)
+            if (id== collision.GetComponentInParent<ClientPlayer>().Id)
             {
-                NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new PlayerHitPacket
-                {
-                   receiverId = collision.GetComponentInParent<ClientPlayer>().Id,
-                   receivedDamage = damage,isProb=false
-                }, LiteNetLib.DeliveryMethod.ReliableOrdered);
 
-                Destroy(gameObject);
+                Debug.Log(damage + " id : " + id);
+
+                if (NetworkManager.instance.server != null)
+                {
+                    NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new PlayerHitPacket
+                    {
+                        receiverId = collision.GetComponentInParent<ClientPlayer>().Id,
+                        receivedDamage = damage,
+                        isProb = false
+                    }, LiteNetLib.DeliveryMethod.ReliableOrdered);
+
+                    
+                }
             }
+
+            Destroy(gameObject);
 
         }
     }

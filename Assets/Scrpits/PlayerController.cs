@@ -30,7 +30,9 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     float fireRate;
-    float damage;
+
+    [SerializeField]
+    public  float damage;
     int magazine;
     bool unlimitedMagazine;
     bool defaultGun;
@@ -71,7 +73,7 @@ public class PlayerController : MonoBehaviour
     public float maxhealth;
 
     [SerializeField]
-    Image healthBar;
+    public Image healthBar;
 
     [SerializeField]
     GameObject changeWeaponButtonObject;
@@ -177,19 +179,24 @@ public class PlayerController : MonoBehaviour
         bulletSpawnPoint = newGun.bullletPoints;
         muzzleFlash = newGun.muzzleFlash;
 
-        if (NetworkManager.instance.server != null)
+        if (GetComponentInParent<ClientPlayer>().isLocal)
         {
-
-
-            NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new WeaponChangePacket
+            if (NetworkManager.instance.server != null)
             {
-                OwnerId = GetComponentInParent<ClientPlayer>().Id,
-                ActiveWeaponIdx= index
+
+
+                NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new WeaponChangePacket
+                {
+                    OwnerId = GetComponentInParent<ClientPlayer>().Id,
+                    ActiveWeaponIdx = index
 
 
 
-            }, LiteNetLib.DeliveryMethod.ReliableOrdered);
+                }, LiteNetLib.DeliveryMethod.ReliableOrdered);
+            }
         }
+
+      
 
 
     }
@@ -249,6 +256,10 @@ public class PlayerController : MonoBehaviour
                 for (int i = 0; i < bulletSpawnPoint.Length; i++)
                 {
                     GameObject newBullet = Instantiate(bulletPrefab, bulletSpawnPoint[i].position, bulletSpawnPoint[i].rotation);
+                    newBullet.GetComponent<Bullet>().id = GetComponentInParent<ClientPlayer>().Id;
+                    newBullet.GetComponent<Bullet>().damage = damage;
+
+                    Debug.Log("Damage Kontrol " + newBullet.GetComponent<Bullet>().damage);
 
                     timer = Time.time + fireRate;
 
@@ -267,6 +278,7 @@ public class PlayerController : MonoBehaviour
                             Rotation = bulletSpawnPoint[i].transform.eulerAngles.z
 
 
+
                         }, LiteNetLib.DeliveryMethod.ReliableOrdered);
                     }
 
@@ -281,6 +293,8 @@ public class PlayerController : MonoBehaviour
                 for (int i = 0; i < bulletSpawnPoint.Length; i++)
                 {
                     GameObject newBullet = Instantiate(bulletPrefab, bulletSpawnPoint[i].position, bulletSpawnPoint[i].rotation);
+                    newBullet.GetComponent<Bullet>().id = GetComponentInParent<ClientPlayer>().Id;
+                    newBullet.GetComponent<Bullet>().damage = damage;
 
                     timer = Time.time + fireRate;
 
