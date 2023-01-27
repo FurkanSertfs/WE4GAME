@@ -10,7 +10,7 @@ using UnityEngine;
 
         public GameObject canvas, mainCamera;
 
-        public bool isLocal;
+        public bool isLocal,inLoby,inRoom;
 
     
 

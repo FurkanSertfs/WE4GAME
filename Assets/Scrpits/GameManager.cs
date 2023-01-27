@@ -46,18 +46,18 @@ public class GameManager : MonoBehaviour
         {
             isSpawned = true;
             
-            GameObject newPlayer = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+            //GameObject newPlayer = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
 
-            newPlayer.GetComponent<ClientPlayer>().Id = id;
-            newPlayer.GetComponent<ClientPlayer>().Username = userName;
-            newPlayer.GetComponent<ClientPlayer>().canvas.SetActive(true);
-            newPlayer.GetComponent<ClientPlayer>().mainCamera.SetActive(true);
-            newPlayer.GetComponent<ClientPlayer>().GetComponentInChildren<JoystickPlayerExample>().enabled = true;
-            newPlayer.GetComponent<ClientPlayer>().GetComponentInChildren<PlayerController>().enabled = true;
-            newPlayer.GetComponent<ClientPlayer>().isLocal = true;
+            //newPlayer.GetComponent<ClientPlayer>().Id = id;
+            //newPlayer.GetComponent<ClientPlayer>().Username = userName;
+            //newPlayer.GetComponent<ClientPlayer>().canvas.SetActive(true);
+            //newPlayer.GetComponent<ClientPlayer>().mainCamera.SetActive(true);
+            //newPlayer.GetComponent<ClientPlayer>().GetComponentInChildren<JoystickPlayerExample>().enabled = true;
+            //newPlayer.GetComponent<ClientPlayer>().GetComponentInChildren<PlayerController>().enabled = true;
+            //newPlayer.GetComponent<ClientPlayer>().isLocal = true;
 
 
-            clients.Add(newPlayer.GetComponent<ClientPlayer>().Id, newPlayer.GetComponent<ClientPlayer>());
+            //clients.Add(newPlayer.GetComponent<ClientPlayer>().Id, newPlayer.GetComponent<ClientPlayer>());
 
         }
     }

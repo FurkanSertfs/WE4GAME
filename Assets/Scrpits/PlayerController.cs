@@ -88,7 +88,7 @@ public class PlayerController : MonoBehaviour
     {
         ChangeGun(0);
 
-        nameText.text = GameManager.instance.userName;
+        
 
     }
 

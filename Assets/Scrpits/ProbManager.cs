@@ -18,6 +18,8 @@ public class ProbManager : MonoBehaviour
     {
         probs=FindObjectsOfType<Probs>();
 
+        
+
         for (int i = 0; i < probs.Length; i++)
         {
             probs[i].GetComponent<Probs>().id = i;

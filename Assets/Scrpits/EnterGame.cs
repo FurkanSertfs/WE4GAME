@@ -26,7 +26,7 @@ public class EnterGame : MonoBehaviour
                 isPressed = true;
                 NetworkManager.instance.netPacketProcessor.Send(NetworkManager.instance.server, new ClientJoinRequestPacket
                 {
-                    Username = playerName
+                   
 
                 }, LiteNetLib.DeliveryMethod.ReliableOrdered);
             }
